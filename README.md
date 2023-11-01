@@ -36,3 +36,22 @@ Flags:
 ```
 
 Use "camundactl [command] --help" for more information about a command.
+
+
+## Cluster create
+
+Example: camundactl cluster create my-fancy-cluster
+
+Usage:
+  camundactl cluster create [cluster name] [flags]
+
+Flags:
+```text 
+      --auto true              whether auto updates are active, defaults to true (default true)
+      --channel Alpha          the channel of the cluster for example Alpha (default "Alpha")
+      --gen Trial Cluster      the cluster type for example Trial Cluster (default "Camunda 8.3.1")
+  -h, --help                   help for create
+      --region Trial Cluster   the cluster type for example Trial Cluster (default "europe-west1")
+      --stage dev              the stage label, one of dev, `test`, `stage`, `prod` (default "dev")
+      --type Trial Cluster     the cluster type for example Trial Cluster (default "Trial Cluster")
+```
