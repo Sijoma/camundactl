@@ -15,14 +15,17 @@ Usage:
     camundactl [command]
 
 Available Commands:
+```text
     cluster     CRUD cluster commands
     completion  Generate the autocompletion script for the specified shell
     help        Help about any command
     login       Authenticate to Camunda Console and store the accessToken in the configuration file.
     org         Set your current Camunda org
     version     Prints version info
+```
 
 Flags:
+```text 
     --accessToken string     console access token
     --client_id string       the id of the client
     --client_secret string   the secret of the client
@@ -30,5 +33,6 @@ Flags:
     -h, --help                   help for camundactl
     --stage string           the console stage to be used, either 'dev'. 'int' or 'prod' (default "prod")
     -t, --toggle                 Help message for toggle
+```
 
 Use "camundactl [command] --help" for more information about a command.
