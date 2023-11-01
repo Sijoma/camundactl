@@ -1,0 +1,18 @@
+dev:
+  accesstoken:
+    accesstoken: <access_token>
+    tokentype: Bearer
+    refreshtoken: ""
+    expiry: 2022-11-11T19:31:57.633013+01:00
+int:
+  accesstoken:
+    accesstoken: <access_token>
+    tokentype: Bearer
+    refreshtoken: ""
+    expiry: 2022-11-11T19:31:57.633013+01:00
+prod:
+  accesstoken:
+    accesstoken: <access_token>
+    tokentype: Bearer
+    refreshtoken: ""
+    expiry: 2022-11-11T19:31:57.633013+01:00
