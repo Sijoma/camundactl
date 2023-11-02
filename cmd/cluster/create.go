@@ -24,8 +24,8 @@ func init() {
 
 	createCmd.Flags().StringVar(&planType, "type", "Trial Cluster", "the cluster type for example `Trial Cluster`")
 	createCmd.Flags().StringVar(&channel, "channel", "Alpha", "the channel of the cluster for example `Alpha`")
-	createCmd.Flags().StringVar(&generation, "gen", "Camunda 8.3.1", "the cluster type for example `Trial Cluster`")
-	createCmd.Flags().StringVar(&region, "region", "europe-west1", "the cluster type for example `Trial Cluster`")
+	createCmd.Flags().StringVar(&generation, "gen", "Camunda 8.3.1", "the cluster type for example `Camunda 8.3.1`")
+	createCmd.Flags().StringVar(&region, "region", "europe-west1", "the cluster type for example `europe-west1`")
 	createCmd.Flags().StringVar(&stageLabel, "stage", "dev", "the stage label, one of `dev`, `test`, `stage`, `prod`")
 	createCmd.Flags().BoolVar(&autoUpdate, "auto", true, "whether auto updates are active, defaults to `true`")
 }
