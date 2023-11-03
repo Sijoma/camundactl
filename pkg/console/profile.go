@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Console) fetchOrgs(ctx context.Context) ([]Organization, error) {
-	client := c.auth0.Oauth().Client(ctx, c.AccessToken)
+	client := c.auth0.Oauth().Client(ctx, c.accessToken)
 	endpoint := c.auth0.AccountsURL() + "/api/organizations/my"
 	//fmt.Println("POST endpoint: " + endpoint)
 

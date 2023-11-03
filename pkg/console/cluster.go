@@ -68,7 +68,7 @@ func (c *Console) CreateCluster(ctx context.Context, cluster NamedClusterCreateR
 		AutoUpdate:   false,
 		StageLabel:   "dev",
 	}
-	client := c.auth0.Oauth().Client(ctx, c.AccessToken)
+	client := c.auth0.Oauth().Client(ctx, c.accessToken)
 	endpoint := "https://" + c.auth0.EndpointURL() + "/api/orgs/" + c.ActiveOrg.Uuid + clusterRoute
 
 	payload, err := json.Marshal(requestedCluster)
@@ -88,31 +88,21 @@ func (c *Console) CreateCluster(ctx context.Context, cluster NamedClusterCreateR
 	}
 	defer resp.Body.Close()
 
-	all, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
 	if resp.StatusCode >= http.StatusOK|http.StatusAccepted|http.StatusCreated {
-		err = fmt.Errorf("error %s, %w", string(all), err)
+		err = fmt.Errorf("error %w", err)
 		return "", err
 	}
 
 	var clusterCreated clusterCreateResponse
-	//err = json.NewDecoder(resp.Body).Decode(&clusterCreated)
-	//if err != nil {
-	//	return "", err
-	//}
-	err = json.Unmarshal(all, &clusterCreated)
+	err = json.NewDecoder(resp.Body).Decode(&clusterCreated)
 	if err != nil {
 		return "", err
 	}
-
 	return clusterCreated.ClusterId, err
 }
 
 func (c *Console) DeleteCluster(ctx context.Context, id string) error {
-	client := c.auth0.Oauth().Client(ctx, c.AccessToken)
+	client := c.auth0.Oauth().Client(ctx, c.accessToken)
 	endpoint := "https://" + c.auth0.EndpointURL() + "/api/orgs/" + c.ActiveOrg.Uuid + clusterRoute + "/" + id
 
 	request, err := http.NewRequest(http.MethodDelete, endpoint, nil)

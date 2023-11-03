@@ -16,8 +16,12 @@ import (
 	"github.com/sijoma/camundactl/internal/config"
 )
 
-func (c *Console) Auth() {
-	c.deviceCodeAuth()
+func (c *Console) Auth() error {
+	return c.deviceCodeAuth()
+}
+
+func (c *Console) IsLoggedIn() bool {
+	return c.accessToken != nil && c.accessToken.AccessToken != ""
 }
 
 func (c *Console) MachineLogin(clientID, clientSecret string) error {
@@ -45,35 +49,32 @@ func (c *Console) MachineLogin(clientID, clientSecret string) error {
 	return nil
 }
 
-func (c *Console) deviceCodeAuth() {
+func (c *Console) deviceCodeAuth() error {
 	reqString := fmt.Sprintf("client_id=%s&scope=%s&audience=%s", c.auth0.Oauth().ClientID, c.auth0.Scopes(), c.auth0.Audience())
 	payload := strings.NewReader(reqString)
 
 	req, err := http.NewRequest("POST", c.auth0.AuthURL(), payload)
 	if err != nil {
-		fmt.Println("Error getting device code auth: ", err)
-		return
+		return fmt.Errorf("getting device code auth failed: %w", err)
+
 	}
 	req.Header.Add("content-type", "application/x-www-form-urlencoded")
 	client := http.Client{Timeout: time.Second * 10}
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println("There was an error performing the request", err)
-		return
+		return fmt.Errorf("there was an error performing device code auth: %w", err)
 	}
 
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println("Error reading response of device code request: ", err)
-		return
+		return fmt.Errorf("reading response of device code request failed: %w", err)
 	}
 
 	var resp deviceCodeFlow
 	err = json.Unmarshal(body, &resp)
 	if err != nil {
-		fmt.Println("There was an error performing the device flow request:", err)
-		return
+		return fmt.Errorf("performing the device flow request failed: %w", err)
 	}
 
 	fmt.Println(color.CyanString("You will now be taken to your browser for authentication"))
@@ -91,7 +92,8 @@ func (c *Console) deviceCodeAuth() {
 			fmt.Println(color.CyanString("Authentication successful "))
 			fmt.Println(color.CyanString("You are great 💪! You are authenticated and can now start to use the CLI."))
 			config.StoreAccessToken(c.stage, token)
-			return
+			c.accessToken = token
+			return nil
 		}
 		time.Sleep(time.Duration(resp.Interval) * time.Second)
 	}

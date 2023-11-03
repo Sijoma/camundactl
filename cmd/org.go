@@ -19,8 +19,8 @@ var orgCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("updating active Organization")
-		c := console.NewConsole(stage)
-		if c.AccessToken.AccessToken == "" {
+		c := console.NewConsole(cmd.Context(), stage)
+		if !c.IsLoggedIn() {
 			fmt.Println("run camundactl login first OR put your accessToken in the config file")
 			return
 		}
@@ -41,8 +41,8 @@ var orgListCmd = &cobra.Command{
 	Short: "List your Camunda orgs",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("org list called")
-		c := console.NewConsole(stage)
-		if c.AccessToken.AccessToken == "" {
+		c := console.NewConsole(cmd.Context(), stage)
+		if !c.IsLoggedIn() {
 			fmt.Println("run camundactl login first OR put your accessToken in the config file")
 			return
 		}

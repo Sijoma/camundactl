@@ -26,7 +26,7 @@ func init() {
 	createCmd.Flags().StringVar(&channel, "channel", "Alpha", "the channel of the cluster for example `Alpha`")
 	createCmd.Flags().StringVar(&generation, "gen", "Camunda 8.3.1", "the cluster type for example `Camunda 8.3.1`")
 	createCmd.Flags().StringVar(&region, "region", "europe-west1", "the cluster type for example `europe-west1`")
-	createCmd.Flags().StringVar(&stageLabel, "stage", "dev", "the stage label, one of `dev`, `test`, `stage`, `prod`")
+	createCmd.Flags().StringVar(&stageLabel, "stagelabel", "dev", "the stage label, one of `dev`, `test`, `stage`, `prod`")
 	createCmd.Flags().BoolVar(&autoUpdate, "auto", true, "whether auto updates are active, defaults to `true`")
 }
 
@@ -50,8 +50,8 @@ var createCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("create called on stage: %s\n", stage)
-		c := console.NewConsole(stage)
-		if c.AccessToken.AccessToken == "" {
+		c := console.NewConsole(cmd.Context(), stage)
+		if !c.IsLoggedIn() {
 			fmt.Println("run camundactl login first OR put your accessToken in the config file")
 			return
 		}

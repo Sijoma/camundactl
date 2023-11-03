@@ -21,7 +21,7 @@ const externalOrgRoute = "/external/organizations/"
 
 func (c *Console) PatchCluster(orgId, clusterId, generationUUID string) error {
 	ctx := context.Background()
-	client := c.auth0.Oauth().Client(ctx, c.AccessToken)
+	client := c.auth0.Oauth().Client(ctx, c.accessToken)
 	endpoint := "https://" + c.auth0.EndpointURL() + externalOrgRoute + orgId + "/clusters/" + clusterId
 	fmt.Println("PATCHING endpoint: " + endpoint)
 

@@ -19,8 +19,8 @@ var deleteCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("delete called on stage: %s\n", stage)
-		c := console.NewConsole(stage)
-		if c.AccessToken.AccessToken == "" {
+		c := console.NewConsole(cmd.Context(), stage)
+		if !c.IsLoggedIn() {
 			fmt.Println("run camundactl login first OR put your accessToken in the config file")
 			return
 		}

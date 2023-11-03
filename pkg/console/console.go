@@ -11,31 +11,31 @@ import (
 )
 
 type Console struct {
-	ctx           context.Context
 	auth0         auth0.Auth0App
-	AccessToken   *oauth2.Token
+	accessToken   *oauth2.Token
 	ActiveOrg     Organization
 	Organizations []Organization
 	stage         string
 }
 
-func NewConsole(stage string) *Console {
-	accessToken, err := config.GetAccessToken(stage)
+func NewConsole(ctx context.Context, stage string) *Console {
+	configToken, err := config.GetAccessToken(stage)
 	if err != nil {
-		fmt.Println("There was an error getting the access token", accessToken)
+		fmt.Println("There was an error getting the access token", configToken)
 	}
 
 	console := Console{
-		ctx:         context.Background(),
-		auth0:       auth0.NewAuth0App(stage),
-		AccessToken: accessToken,
-		stage:       stage,
+		auth0: auth0.NewAuth0App(stage),
+		stage: stage,
 	}
 
-	err = console.UpdateProfile(context.Background())
-	if err != nil {
-		fmt.Println("unable to update profile")
-		return nil
+	if configToken.AccessToken != "" {
+		console.accessToken = configToken
+		err = console.UpdateProfile(ctx)
+		if err != nil {
+			fmt.Println("unable to update profile")
+			return nil
+		}
 	}
 
 	return &console
@@ -43,7 +43,6 @@ func NewConsole(stage string) *Console {
 
 func NewMachineConsole(stage, clientID string) *Console {
 	instance := Console{
-		ctx:   context.Background(),
 		auth0: auth0.NewAuth0m2m(stage, clientID),
 		stage: stage,
 	}

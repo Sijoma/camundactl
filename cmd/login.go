@@ -19,10 +19,14 @@ var loginCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if clientID == "" || clientSecret == "" {
 			fmt.Println("using device login")
-			c := console.NewConsole(stage)
-			c.Auth()
+			c := console.NewConsole(cmd.Context(), stage)
+			err := c.Auth()
+			if err != nil {
+				fmt.Printf("Authenticatio to Console failed: %v\n", err)
+				return
+			}
 
-			err := c.UpdateProfile(cmd.Context())
+			err = c.UpdateProfile(cmd.Context())
 			if err != nil {
 				fmt.Printf("unable to update profile: %v\n", err)
 			}
